@@ -188,6 +188,8 @@ console.log("inject.js ✅ 启动窗口终端");
       return col;
     }
 
+    document.title = "XRobot Web Terminal";
+
     const columns = [
       ["文档", [
         ["入门", "/docs/intro"],
