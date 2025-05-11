@@ -1,21 +1,59 @@
-name: build
+name: Deploy WebAssembly to GitHub Pages
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: setup env
-      run: sudo apt update && sudo apt install -y git python3 xz-utils cmake make && git clone https://github.com/Jiu-xiao/libxr
-    - name: setup Emscripten
-      run: git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && git pull && ./emsdk install latest && ./emsdk activate latest && source ./emsdk_env.sh
-    - name: configure and make
-      run: source emsdk/emsdk_env.sh && mkdir build && cd build && emcmake cmake .. && emmake make
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y git python3 xz-utils cmake make
+
+      - name: Setup Emscripten
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          ./emsdk install latest
+          ./emsdk activate latest
+
+      - name: Build with emcmake/emmake
+        run: |
+          source emsdk/emsdk_env.sh
+          mkdir -p build
+          cd build
+          emcmake cmake ..
+          emmake make
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
