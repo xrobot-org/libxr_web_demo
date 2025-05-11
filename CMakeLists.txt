@@ -33,7 +33,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     -sEXPORTED_FUNCTIONS=['_main','_receive_input','_button_click'] -sEXPORTED_RUNTIME_METHODS=['ccall','cwrap'] \
     --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xterm/xterm.min.js \
     --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xterm/xterm-addon-fit.min.js \
-    --pre-js=${CMAKE_SOURCE_DIR}/stdin.js"
+    --pre-js=${CMAKE_SOURCE_DIR}/inject.js"
 )
 
 execute_process(
