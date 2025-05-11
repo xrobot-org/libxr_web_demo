@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: setup env
-      run: apt update && apt install -y git python3 xz-utils cmake make && git clone https://github.com/Jiu-xiao/libxr
+      run: sudo apt update && sudo apt install -y git python3 xz-utils cmake make && git clone https://github.com/Jiu-xiao/libxr
     - name: setup Emscripten
       run: git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && git pull && ./emsdk install latest && ./emsdk activate latest && source ./emsdk_env.sh
     - name: configure and make
