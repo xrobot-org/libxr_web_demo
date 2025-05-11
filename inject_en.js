@@ -1,0 +1,298 @@
+console.log("inject.js ✅ Launching Web Terminal");
+
+(function () {
+  function loadCSS(href) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function initTerminal() {
+    // Clear the page and set base styles
+    document.body.innerHTML = "";
+    document.body.style = `
+      margin: 0;
+      padding: 0;
+      background: #FFF;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Consolas, monospace;
+    `.trim();
+
+    // Create outer wrapper
+    const wrapper = document.createElement("div");
+    wrapper.style = `
+      width: 960px;
+      height: 100%;
+      background: #1e1e1e;
+      border-radius: 6px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    `.trim();
+
+    // Create top title bar
+    const titleBar = document.createElement("div");
+    titleBar.style = `
+      height: 40px;
+      background: #2d2d2d;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 14px;
+      user-select: none;
+    `.trim();
+
+    // Left controls (back button + window buttons)
+    const leftControls = document.createElement("div");
+    leftControls.style = "display: flex; align-items: center; gap: 12px;";
+
+    const navBtn = document.createElement("button");
+    navBtn.textContent = "Back to Home";
+    navBtn.style = `
+      background: transparent;
+      border: 1px solid #666;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    `;
+    navBtn.onmouseenter = () => navBtn.style.background = "#444";
+    navBtn.onmouseleave = () => navBtn.style.background = "transparent";
+    navBtn.onclick = () => {
+      window.location.href = "https://xrobot-org.github.io/en/";
+    };
+
+    const buttonWrap = document.createElement("div");
+    buttonWrap.style = "display: flex; gap: 8px;";
+    ["#ff5f56", "#ffbd2e", "#27c93f"].forEach(color => {
+      const btn = document.createElement("span");
+      btn.style = `
+        width: 12px;
+        height: 12px;
+        background: ${color};
+        border-radius: 50%;
+        display: inline-block;
+      `;
+      buttonWrap.appendChild(btn);
+    });
+
+    leftControls.appendChild(navBtn);
+    leftControls.appendChild(buttonWrap);
+
+    const titleText = document.createElement("div");
+    titleText.textContent = "XRobot Web Terminal";
+
+    titleBar.appendChild(leftControls);
+    titleBar.appendChild(titleText);
+
+    // Terminal container
+    const container = document.createElement("div");
+    container.id = "terminal";
+    container.style = `
+      flex: 1;
+      background: black;
+    `.trim();
+
+    // Bottom control panel (button + LED)
+    const controlPanel = document.createElement("div");
+    controlPanel.style = `
+      height: 60px;
+      background: #121212;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      border-top: 1px solid #333;
+    `;
+
+    const button = document.createElement("button");
+    button.textContent = "Button";
+    button.style = `
+      padding: 8px 20px;
+      font-size: 14px;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    `;
+    button.onmouseenter = () => button.style.background = "#666";
+    button.onmouseleave = () => button.style.background = "#444";
+    button.onclick = () => {
+      if (Module.ccall) {
+        Module.ccall("button_click", null, [], []);
+      }
+    };
+
+    const led = document.createElement("div");
+    led.style = `
+      width: 16px;
+      height: 16px;
+      background: red;
+      border-radius: 50%;
+      box-shadow: 0 0 6px red;
+    `;
+
+    // Method to toggle LED from C++
+    Module.set_led = function (on) {
+      led.style.background = on ? "limegreen" : "red";
+      led.style.boxShadow = on ? "0 0 8px lime" : "0 0 6px red";
+    };
+
+    controlPanel.appendChild(button);
+    controlPanel.appendChild(led);
+
+    // Footer area
+    const footer = document.createElement("footer");
+    footer.style = `
+      background: #f5f5f5;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      color: #333;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 32px;
+    `;
+
+    function createFooterColumn(title, items) {
+      const col = document.createElement("div");
+      col.style = "min-width: 180px;";
+      const heading = document.createElement("h4");
+      heading.textContent = title;
+      heading.style = "margin-bottom: 8px; font-weight: bold;";
+      col.appendChild(heading);
+      items.forEach(([text, href]) => {
+        const link = document.createElement("a");
+        link.href = href;
+        link.textContent = text;
+        link.target = "_blank";
+        link.style = `
+          display: block;
+          margin: 4px 0;
+          color: #555;
+          text-decoration: none;
+        `;
+        link.onmouseenter = () => (link.style.color = "#000");
+        link.onmouseleave = () => (link.style.color = "#555");
+        col.appendChild(link);
+      });
+      return col;
+    }
+
+    document.title = "XRobot Web Terminal";
+
+    const columns = [
+      ["Docs", [
+        ["Getting Started", "/docs/intro"],
+        ["LibXR Reference ↗", "https://xrobot-org.github.io/libxr_web_doc/"],
+        ["CodeGenerator CLI ↗", "https://xrobot-org.github.io/codegen_doc/"],
+        ["XRobot CLI ↗", "https://xrobot-org.github.io/xrobot_cli_doc/"],
+      ]],
+      ["Community", [
+        ["GitHub Repos ↗", "https://github.com/xrobot-org"],
+        ["LibXR ↗", "https://github.com/xrobot-org/libxr"],
+        ["CodeGenerator ↗", "https://github.com/xrobot-org/libxr_code_generator"],
+        ["QDU Robomaster Future Team ↗", "https://qm.qq.com/cgi-bin/qm/qr?k=r91lDN0dFgK"],
+      ]],
+      ["Media", [
+        ["Bilibili Video Tutorials ↗", "https://space.bilibili.com/390154571"],
+        ["Future Team Bilibili Channel ↗", "https://space.bilibili.com/559062"],
+      ]],
+      ["Contact", [
+        ["Email ↗", "mailto:xrobot.org@outlook.com"],
+        ["QQ Group: 608182228 ↗", "https://jq.qq.com/?_wv=1027&k=RB3CUbHg"],
+      ]],
+    ];
+
+    columns.forEach(([title, items]) => {
+      footer.appendChild(createFooterColumn(title, items));
+    });
+
+    const copyright = document.createElement("div");
+    copyright.style = `
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin-top: 16px;
+    `;
+    copyright.innerHTML = `Copyright © 2025 XRobot`;
+    footer.appendChild(copyright);
+
+    // Assemble page structure
+    wrapper.appendChild(titleBar);
+    wrapper.appendChild(container);
+    wrapper.appendChild(controlPanel);
+    wrapper.appendChild(footer);
+    document.body.appendChild(wrapper);
+
+    // Hide scrollbars
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .xterm-viewport {
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
+      }
+      ::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize XTerm
+    const term = new Terminal({
+      convertEol: true,
+      fontFamily: 'Consolas, monospace',
+      fontSize: 14,
+      lineHeight: 1.2,
+      theme: {
+        background: '#000000',
+        foreground: '#c0c0c0',
+        cursor: '#00ff00'
+      }
+    });
+
+    const fitAddon = new FitAddon.FitAddon();
+    term.loadAddon(fitAddon);
+    term.open(container);
+    fitAddon.fit();
+    window.addEventListener("resize", () => fitAddon.fit());
+
+    // WASM <-> JS bridge
+    window.Module = window.Module || {};
+    Module.put_char = ch => term.write(ch);
+    Module.put_chars = str => term.write(str);
+
+    term.onData(data => {
+      if (Module.ccall) {
+        Module.ccall("receive_input", null, ["string"], [data]);
+      }
+    });
+
+    term.write("\x1b[1;36m[ New Terminal Initialized ]\x1b[0m\r\n");
+  }
+
+  loadCSS("xterm.css");
+
+  if (typeof Module !== "undefined" && Module.calledRun) {
+    initTerminal();
+  } else {
+    const oldInit = Module.onRuntimeInitialized;
+    Module.onRuntimeInitialized = function () {
+      if (typeof oldInit === "function") oldInit();
+      initTerminal();
+    };
+  }
+})();
