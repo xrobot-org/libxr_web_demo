@@ -193,24 +193,24 @@ console.log("inject.js ✅ Launching Web Terminal");
 
     const columns = [
       ["Docs", [
-        ["Getting Started", "/docs/intro"],
-        ["LibXR Reference ↗", "https://xrobot-org.github.io/libxr_web_doc/"],
-        ["CodeGenerator CLI ↗", "https://xrobot-org.github.io/codegen_doc/"],
-        ["XRobot CLI ↗", "https://xrobot-org.github.io/xrobot_cli_doc/"],
+        ["Getting Started", "https://xrobot-org.github.io/"],
+        ["LibXR Reference ↗", "https://jiu-xiao.github.io/libxr/"],
+        ["CodeGenerator CLI ↗", "https://pypi.org/project/libxr/"],
+        ["XRobot CLI ↗", "https://pypi.org/project/xrobot/"],
       ]],
       ["Community", [
         ["GitHub Repos ↗", "https://github.com/xrobot-org"],
-        ["LibXR ↗", "https://github.com/xrobot-org/libxr"],
-        ["CodeGenerator ↗", "https://github.com/xrobot-org/libxr_code_generator"],
-        ["QDU Robomaster Future Team ↗", "https://qm.qq.com/cgi-bin/qm/qr?k=r91lDN0dFgK"],
+        ["LibXR ↗", "https://github.com/Jiu-xiao/libxr"],
+        ["CodeGenerator ↗", "https://github.com/Jiu-xiao/LibXR_CppCodeGenerator"],
+        ["QDU Robomaster Future Team ↗", "https://github.com/QDU-Robomaster"],
       ]],
       ["Media", [
-        ["Bilibili Video Tutorials ↗", "https://space.bilibili.com/390154571"],
-        ["Future Team Bilibili Channel ↗", "https://space.bilibili.com/559062"],
+        ["Bilibili Video Tutorials ↗", "https://space.bilibili.com/339766655/lists"],
+        ["Future Team Bilibili Channel ↗", "https://space.bilibili.com/1309383975"],
       ]],
       ["Contact", [
-        ["Email ↗", "mailto:xrobot.org@outlook.com"],
-        ["QQ Group: 608182228 ↗", "https://jq.qq.com/?_wv=1027&k=RB3CUbHg"],
+        ["Email ↗", "mailto:Cong.Liu_Xiao@outlook.com"],
+        ["QQ Group: 608182228 ↗", "https://qm.qq.com/q/RPgE71OXmw"],
       ]],
     ];
 
