@@ -1,5 +1,11 @@
 console.log("inject.js ✅ 启动窗口终端");
 
+var script = document.createElement("script");
+script.defer = true;
+script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+script.setAttribute("data-cf-beacon", '{"token": "8659aca76cfa4141bdd852a2f5652c32"}');
+document.head.appendChild(script);
+
 (function () {
   function loadCSS(href) {
     const link = document.createElement("link");
