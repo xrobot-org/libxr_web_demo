@@ -73,7 +73,7 @@ document.head.appendChild(script);
     navBtn.onmouseenter = () => navBtn.style.background = "#444";
     navBtn.onmouseleave = () => navBtn.style.background = "transparent";
     navBtn.onclick = () => {
-      window.location.href = "https://xrobot-org.github.io/en/";
+      window.location.href = "https://xrobot.work/en/";
     };
 
     const buttonWrap = document.createElement("div");
@@ -199,8 +199,8 @@ document.head.appendChild(script);
 
     const columns = [
       ["Docs", [
-        ["Getting Started", "https://xrobot-org.github.io/"],
-        ["LibXR Reference ↗", "https://jiu-xiao.github.io/libxr/"],
+        ["Getting Started", "https://xrobot.work/"],
+        ["LibXR Reference ↗", "https://xrobot.work/libxr/"],
         ["CodeGenerator CLI ↗", "https://pypi.org/project/libxr/"],
         ["XRobot CLI ↗", "https://pypi.org/project/xrobot/"],
       ]],
