@@ -4,38 +4,36 @@ on:
   push:
     branches:
       - master
+      - dev
+  pull_request:
+    branches:
+      - master
+      - dev
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: emscripten/emsdk:latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install -y git python3 xz-utils cmake make && git clone https://github.com/Jiu-xiao/libxr
-
-      - name: Setup Emscripten
+      - name: Show the LibXR revision
         run: |
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          ./emsdk install latest
-          ./emsdk activate latest
+          git config --global --add safe.directory '*'
+          git submodule status
+          emcc --version | head -n 1
 
       - name: Build with emcmake/emmake
         run: |
-          source emsdk/emsdk_env.sh
           mkdir -p build
           cd build
           emcmake cmake ..
@@ -48,7 +46,14 @@ jobs:
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
