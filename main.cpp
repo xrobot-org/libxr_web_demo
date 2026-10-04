@@ -36,7 +36,7 @@ int led_task(void *, int argc, char **argv)
 {
   if (argc == 1)
   {
-    LibXR::STDIO::Printf("Usage: led <on|off>\n");
+    LibXR::STDIO::Printf<"Usage: led <on|off>\n">();
   }
   else if (argc == 2)
   {
@@ -50,12 +50,12 @@ int led_task(void *, int argc, char **argv)
     }
     else
     {
-      LibXR::STDIO::Printf("Usage: led <on|off>\n");
+      LibXR::STDIO::Printf<"Usage: led <on|off>\n">();
     }
   }
   else
   {
-    LibXR::STDIO::Printf("Usage: led <on|off>\n");
+    LibXR::STDIO::Printf<"Usage: led <on|off>\n">();
   }
 
   return 0;
