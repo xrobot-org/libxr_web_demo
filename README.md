@@ -31,6 +31,8 @@ The build uses `emcmake` and `emmake` from Emscripten, and the image `emscripten
 
 `.github/workflows/build.yml` checks out the submodules recursively and builds in the image above, for pushes to `master` and `dev` and for pull requests targeting them. Every build uploads `build/` as the GitHub Pages artifact; on a push to `master` or a manual run on `master`, the `deploy` job publishes that artifact at <https://xrobot.work/libxr_web_demo/> (English page `index_en.html`).
 
+## 许可 / License
+
 本仓库以 Apache-2.0 发布，见 [LICENSE](LICENSE)；`third_party/xterm/` 中的 xterm.js 5.3.0 与 xterm-addon-fit 0.8.0 以 MIT 许可发布，许可声明见 [third_party/xterm/LICENSE](third_party/xterm/LICENSE)。
 
 This repository is released under Apache-2.0, see [LICENSE](LICENSE); xterm.js 5.3.0 and xterm-addon-fit 0.8.0 in `third_party/xterm/` are released under the MIT license; the notices are in [third_party/xterm/LICENSE](third_party/xterm/LICENSE).
