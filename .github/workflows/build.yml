@@ -9,6 +9,8 @@ on:
     branches:
       - master
       - dev
+  schedule:
+    - cron: "17 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,6 +18,7 @@ permissions:
 
 jobs:
   build:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     container:
       image: emscripten/emsdk:latest
@@ -62,3 +65,32 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Compatibility canary: builds against the head of the LibXR master branch.
+  # A failure here is reported but does not fail the workflow.
+  libxr-master:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    container:
+      image: emscripten/emsdk:latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Update LibXR to master
+        run: |
+          git config --global --add safe.directory '*'
+          git -C libxr fetch --depth 1 origin master
+          git -C libxr checkout --detach FETCH_HEAD
+          git -C libxr log -1 --format='LibXR master: %H %s'
+
+      - name: Build with emcmake/emmake
+        run: |
+          mkdir -p build
+          cd build
+          emcmake cmake ..
+          emmake make
