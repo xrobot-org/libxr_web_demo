@@ -3,7 +3,7 @@ console.log("inject.js ✅ 启动窗口终端");
 var script = document.createElement("script");
 script.defer = true;
 script.src = "https://static.cloudflareinsights.com/beacon.min.js";
-script.setAttribute("data-cf-beacon", '{"token": "8659aca76cfa4141bdd852a2f5652c32"}');
+script.setAttribute("data-cf-beacon", '{"token": "3a9a312f0bc040839601f73b73ac4245"}');
 document.head.appendChild(script);
 
 (function () {
